@@ -1,0 +1,430 @@
+[
+  {
+    "case": "sorted_score_stream_merge_marker",
+    "method": "inspect_inputs",
+    "ok": true,
+    "message": "inputs are two ascending sorted numeric streams with expected fixed values",
+    "details": {
+      "stream_a": [
+        0.1,
+        0.4,
+        0.7
+      ],
+      "stream_b": [
+        0.2,
+        0.5,
+        0.8
+      ],
+      "a_sorted": true,
+      "b_sorted": true
+    }
+  },
+  {
+    "case": "sorted_score_stream_merge_marker",
+    "method": "execute_merge",
+    "ok": true,
+    "message": "merge completed, output matches expected",
+    "details": {
+      "inputs": {
+        "stream_a": [
+          0.1,
+          0.4,
+          0.7
+        ],
+        "stream_b": [
+          0.2,
+          0.5,
+          0.8
+        ]
+      },
+      "merged": [
+        0.1,
+        0.2,
+        0.4,
+        0.5,
+        0.7,
+        0.8
+      ],
+      "output_count": 6,
+      "expected": [
+        0.1,
+        0.2,
+        0.4,
+        0.5,
+        0.7,
+        0.8
+      ]
+    }
+  },
+  {
+    "case": "sorted_score_stream_merge_marker",
+    "method": "verify_relation",
+    "ok": true,
+    "message": "merged output is globally nondecreasing and contains every input value exactly once, matching expected order",
+    "details": {
+      "merged": [
+        0.1,
+        0.2,
+        0.4,
+        0.5,
+        0.7,
+        0.8
+      ],
+      "globally_nondecreasing": true,
+      "multiset_preserved": true
+    }
+  },
+  {
+    "case": "keyed_record_merge_marker",
+    "method": "inspect_inputs",
+    "ok": true,
+    "message": "inputs are two descending sorted record streams with distinct scores and expected fixed values",
+    "details": {
+      "stream_a": [
+        {
+          "id": "a1",
+          "score": 0.95
+        },
+        {
+          "id": "a2",
+          "score": 0.7
+        },
+        {
+          "id": "a3",
+          "score": 0.4
+        }
+      ],
+      "stream_b": [
+        {
+          "id": "b1",
+          "score": 0.9
+        },
+        {
+          "id": "b2",
+          "score": 0.6
+        },
+        {
+          "id": "b3",
+          "score": 0.2
+        }
+      ],
+      "a_descending": true,
+      "b_descending": true,
+      "all_scores_distinct": true
+    }
+  },
+  {
+    "case": "keyed_record_merge_marker",
+    "method": "execute_merge",
+    "ok": true,
+    "message": "keyed merge completed with expected record count",
+    "details": {
+      "inputs": {
+        "stream_a": [
+          {
+            "id": "a1",
+            "score": 0.95
+          },
+          {
+            "id": "a2",
+            "score": 0.7
+          },
+          {
+            "id": "a3",
+            "score": 0.4
+          }
+        ],
+        "stream_b": [
+          {
+            "id": "b1",
+            "score": 0.9
+          },
+          {
+            "id": "b2",
+            "score": 0.6
+          },
+          {
+            "id": "b3",
+            "score": 0.2
+          }
+        ]
+      },
+      "merge_args": {
+        "key": "lambda record: record[\"score\"]",
+        "reverse": true
+      },
+      "merged": [
+        {
+          "id": "a1",
+          "score": 0.95
+        },
+        {
+          "id": "b1",
+          "score": 0.9
+        },
+        {
+          "id": "a2",
+          "score": 0.7
+        },
+        {
+          "id": "b2",
+          "score": 0.6
+        },
+        {
+          "id": "a3",
+          "score": 0.4
+        },
+        {
+          "id": "b3",
+          "score": 0.2
+        }
+      ],
+      "merged_ids": [
+        "a1",
+        "b1",
+        "a2",
+        "b2",
+        "a3",
+        "b3"
+      ],
+      "output_count": 6
+    }
+  },
+  {
+    "case": "keyed_record_merge_marker",
+    "method": "verify_relation",
+    "ok": true,
+    "message": "merged ID order matches expected, scores globally nonincreasing, every input record preserved exactly once",
+    "details": {
+      "merged_ids": [
+        "a1",
+        "b1",
+        "a2",
+        "b2",
+        "a3",
+        "b3"
+      ],
+      "merged_scores": [
+        0.95,
+        0.9,
+        0.7,
+        0.6,
+        0.4,
+        0.2
+      ],
+      "scores_globally_nonincreasing": true,
+      "all_records_preserved": true
+    }
+  },
+  {
+    "case": "unsorted_input_precondition_marker",
+    "method": "inspect_inputs",
+    "ok": true,
+    "message": "stream_a contains exactly one deliberate inversion (0.70 before 0.40), stream_b is sorted",
+    "details": {
+      "stream_a": [
+        0.1,
+        0.7,
+        0.4
+      ],
+      "stream_b": [
+        0.2,
+        0.5,
+        0.8
+      ],
+      "stream_a_sorted": false,
+      "stream_b_sorted": true,
+      "inversions": [
+        [
+          1,
+          0.7,
+          0.4
+        ]
+      ]
+    }
+  },
+  {
+    "case": "unsorted_input_precondition_marker",
+    "method": "execute_merge",
+    "ok": true,
+    "message": "raw heapq.merge completed without exception (precondition violation not detected at runtime)",
+    "details": {
+      "inputs": {
+        "stream_a": [
+          0.1,
+          0.7,
+          0.4
+        ],
+        "stream_b": [
+          0.2,
+          0.5,
+          0.8
+        ]
+      },
+      "merged": [
+        0.1,
+        0.2,
+        0.5,
+        0.7,
+        0.4,
+        0.8
+      ],
+      "output_count": 6,
+      "exception_type": null,
+      "exception_msg": null
+    }
+  },
+  {
+    "case": "unsorted_input_precondition_marker",
+    "method": "verify_relation",
+    "ok": true,
+    "message": "precondition violation confirmed: no exception raised, merged output is not globally sorted, differs from sorted concatenation",
+    "details": {
+      "merged": [
+        0.1,
+        0.2,
+        0.5,
+        0.7,
+        0.4,
+        0.8
+      ],
+      "correctly_sorted": [
+        0.1,
+        0.2,
+        0.4,
+        0.5,
+        0.7,
+        0.8
+      ],
+      "merged_is_sorted": false,
+      "merged_equals_sorted_concat": false,
+      "exception_raised": false
+    }
+  },
+  {
+    "case": "lazy_merge_consumption_marker",
+    "method": "inspect_inputs",
+    "ok": true,
+    "message": "counting generators initialized with expected fixed values, zero initial yield counters",
+    "details": {
+      "stream_a_values": [
+        0.1,
+        0.4,
+        0.7
+      ],
+      "stream_b_values": [
+        0.2,
+        0.5,
+        0.8
+      ],
+      "initial_yield_count_a": 0,
+      "initial_yield_count_b": 0
+    }
+  },
+  {
+    "case": "lazy_merge_consumption_marker",
+    "method": "execute_merge",
+    "ok": true,
+    "message": "lazy merge executed: zero consumption at construction, correct prefix, correct full output",
+    "details": {
+      "inputs": {
+        "stream_a": [
+          0.1,
+          0.4,
+          0.7
+        ],
+        "stream_b": [
+          0.2,
+          0.5,
+          0.8
+        ]
+      },
+      "prefix_len": 2,
+      "prefix": [
+        0.1,
+        0.2
+      ],
+      "suffix": [
+        0.4,
+        0.5,
+        0.7,
+        0.8
+      ],
+      "full_output": [
+        0.1,
+        0.2,
+        0.4,
+        0.5,
+        0.7,
+        0.8
+      ],
+      "counts": {
+        "at_construction": {
+          "a": 0,
+          "b": 0
+        },
+        "after_prefix": {
+          "a": 2,
+          "b": 1
+        },
+        "final": {
+          "a": 3,
+          "b": 3
+        }
+      },
+      "expected_prefix": [
+        0.1,
+        0.2
+      ],
+      "expected_suffix": [
+        0.4,
+        0.5,
+        0.7,
+        0.8
+      ],
+      "expected_full": [
+        0.1,
+        0.2,
+        0.4,
+        0.5,
+        0.7,
+        0.8
+      ]
+    }
+  },
+  {
+    "case": "lazy_merge_consumption_marker",
+    "method": "verify_relation",
+    "ok": true,
+    "message": "lazy consumption verified: zero at construction, correct prefix [0.10, 0.20], partial source consumption, correct suffix, full output correct, all source values yielded exactly once",
+    "details": {
+      "prefix": [
+        0.1,
+        0.2
+      ],
+      "suffix": [
+        0.4,
+        0.5,
+        0.7,
+        0.8
+      ],
+      "full_output": [
+        0.1,
+        0.2,
+        0.4,
+        0.5,
+        0.7,
+        0.8
+      ],
+      "counts_after_prefix": {
+        "a": 2,
+        "b": 1
+      },
+      "final_counts": {
+        "a": 3,
+        "b": 3
+      },
+      "all_values_yielded_exactly_once": true
+    }
+  }
+]

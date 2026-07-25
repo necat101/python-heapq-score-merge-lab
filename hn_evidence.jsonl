@@ -1,0 +1,31 @@
+{"source": "hn_story", "id": 27823180, "title": "Beating TimSort at Merging", "url": "https://earthly.dev/blog/python-timsort-merge/", "by": "andrewstetsenko", "time": 1626194812}
+{"source": "linked_article", "claim": "heapq.merge takes advantage of the fact that lists are already sorted, so we get a new sorted list in linear time rather than n*log(n) time for combining and sorting two unsorted lists", "url": "https://earthly.dev/blog/python-timsort-merge/"}
+{"source": "linked_article", "claim": "Python's list.sort is the original implementation of TimSort", "url": "https://earthly.dev/blog/python-timsort-merge/"}
+{"source": "linked_article", "claim": "TimSort is designed to find runs of sequential numbers and merge them together", "url": "https://earthly.dev/blog/python-timsort-merge/"}
+{"source": "hn_comment", "id": 27823851, "by": "CogitoCogito", "claim": "heapq.merge is written in Python", "url": "https://news.ycombinator.com/item?id=27823851"}
+{"source": "hn_comment", "id": 27824912, "by": "danbruc", "claim": "The first Python implementation is bad - removing the first element in each iteration is O(n), the C implementation gets this right by maintaining one index into each list instead of modifying the lists", "url": "https://news.ycombinator.com/item?id=27824912"}
+{"source": "hn_comment", "id": 27823920, "by": "jhokanson", "claim": "Python doesn't provide a mergesort option [in list.sort], other than via heapq", "url": "https://news.ycombinator.com/item?id=27823920"}
+{"source": "python_docs", "claim": "heapq.merge(*iterables, key=None, reverse=False) — Merge multiple sorted inputs into a single sorted output", "url": "https://docs.python.org/3/library/heapq.html#heapq.merge"}
+{"source": "python_docs", "claim": "heapq.merge is similar to sorted(itertools.chain(*iterables)) but returns an iterable, does not pull the data into memory all at once, and assumes that each of the input streams is already sorted (smallest to largest)", "url": "https://docs.python.org/3/library/heapq.html#heapq.merge"}
+{"source": "python_docs", "claim": "heapq.merge key function specifies a function of one argument that is used to extract a comparison key from each input element, default None (compare the elements directly)", "url": "https://docs.python.org/3/library/heapq.html#heapq.merge"}
+{"source": "python_docs", "claim": "heapq.merge reverse=True is similar to having the key function return the elements in reverse order for all the inputs which are assumed to be sorted in reverse order", "url": "https://docs.python.org/3/library/heapq.html#heapq.merge"}
+{"source": "local_observation", "case": "sorted_score_stream_merge_marker", "observation": "heapq.merge([0.10, 0.40, 0.70], [0.20, 0.50, 0.80]) produces [0.10, 0.20, 0.40, 0.50, 0.70, 0.80], globally nondecreasing, all inputs preserved"}
+{"source": "local_observation", "case": "keyed_record_merge_marker", "observation": "heapq.merge with key=lambda r: r[\"score\"], reverse=True correctly merges two descending record streams; ID order [\"a1\", \"b1\", \"a2\", \"b2\", \"a3\", \"b3\"], scores globally nonincreasing"}
+{"source": "local_observation", "case": "unsorted_input_precondition_marker", "observation": "heapq.merge([0.10, 0.70, 0.40], [0.20, 0.50, 0.80]) raises no exception but produces [0.10, 0.20, 0.5, 0.7, 0.4, 0.8] which is not globally sorted and differs from sorted concatenation"}
+{"source": "local_observation", "case": "lazy_merge_consumption_marker", "observation": "constructing heapq.merge(gen_a, gen_b) consumes zero source items; consuming 2 merged values yields [0.10, 0.20] with partial source consumption (< 6 total, >= 1 total); remainder yields [0.40, 0.50, 0.70, 0.80]; full output correct"}
+{"source": "non_claim", "text": "heapq.merge sorts unsorted inputs"}
+{"source": "non_claim", "text": "heapq.merge validates input ordering"}
+{"source": "non_claim", "text": "laziness means zero lookahead after iteration starts"}
+{"source": "non_claim", "text": "this lab proves bounded-memory behavior for every workload"}
+{"source": "non_claim", "text": "key-based merging resolves equal-score ties in a universally meaningful way"}
+{"source": "non_claim", "text": "this lab measures speed or proves performance superiority"}
+{"source": "non_claim", "text": "descending score order is always appropriate for ML pipelines"}
+{"source": "limitation", "text": "lab does not cover duplicate-score tie behavior"}
+{"source": "limitation", "text": "lab does not cover empty streams"}
+{"source": "limitation", "text": "lab does not cover three-way merges beyond the two-input cases used here"}
+{"source": "limitation", "text": "lab does not cover top-k truncation"}
+{"source": "limitation", "text": "lab does not cover mutable source streams"}
+{"source": "limitation", "text": "lab does not cover concurrency"}
+{"source": "limitation", "text": "lab does not cover external datasets"}
+{"source": "limitation", "text": "lab does not cover performance measurements"}
+{"source": "limitation", "text": "lab does not cover production ranking quality"}

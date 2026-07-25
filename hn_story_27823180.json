@@ -1,0 +1,28 @@
+{
+  "by": "andrewstetsenko",
+  "descendants": 69,
+  "id": 27823180,
+  "kids": [
+    27826221,
+    27823920,
+    27825896,
+    27823990,
+    27823851,
+    27823553,
+    27823832,
+    27824912,
+    27823808,
+    27827664,
+    27827380,
+    27824367,
+    27823497,
+    27828911,
+    27823857,
+    27823846
+  ],
+  "score": 282,
+  "time": 1626194812,
+  "title": "Beating TimSort at Merging",
+  "type": "story",
+  "url": "https://earthly.dev/blog/python-timsort-merge/"
+}
