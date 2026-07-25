@@ -31,6 +31,14 @@ From https://docs.python.org/3/library/heapq.html#heapq.merge:
 - **unsorted_input_precondition_marker**: `heapq.merge([0.10, 0.70, 0.40], [0.20, 0.50, 0.80])` raises no exception but produces `[0.10, 0.20, 0.5, 0.7, 0.4, 0.8]` – not globally sorted, differs from sorted concatenation.
 - **lazy_merge_consumption_marker**: constructing `heapq.merge(gen_a, gen_b)` consumes zero source items; consuming 2 merged values yields `[0.10, 0.20]` with partial source consumption (< 6 total, >= 1 total); remainder yields `[0.40, 0.50, 0.70, 0.80]`; full output correct.
 
+## HN thread retrieval
+
+The HN thread was read with:
+
+```
+hackernews get-item --id 27823180
+```
+
 ## Non-claims and limitations
 
 This lab does **not** claim that:
